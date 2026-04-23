@@ -1,0 +1,25 @@
+<%- include("partials/header") %>
+<section class="section">
+  <h1>Customer Dashboard</h1>
+  <p>Welcome, <strong><%= user.name %></strong></p>
+  <form action="/auth/logout" method="post"><button class="btn btn-soft" type="submit">Logout</button></form>
+  <h2 style="margin-top:24px;">Recent Orders</h2>
+  <% if (!orders.length) { %>
+    <p>No orders yet.</p>
+  <% } else { %>
+    <table>
+      <thead><tr><th>Order ID</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+      <tbody>
+        <% orders.forEach((order) => { %>
+          <tr>
+            <td><%= String(order._id).slice(-6) %></td>
+            <td>$<%= order.total.toFixed(2) %></td>
+            <td><%= order.status %></td>
+            <td><%= new Date(order.createdAt).toLocaleDateString() %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+<%- include("partials/footer") %>
