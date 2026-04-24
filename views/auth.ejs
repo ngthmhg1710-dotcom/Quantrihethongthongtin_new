@@ -1,22 +1,70 @@
 <%- include("partials/header") %>
-<section class="section two-col">
-  <div class="card">
-    <h2>Login</h2>
-    <% if (error) { %><p style="color:#ba1a1a;"><%= error %></p><% } %>
-    <form action="/auth/login" method="post">
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button class="btn btn-primary" type="submit">Login</button>
-    </form>
+<section class="section auth-layout">
+  <div class="auth-promo">
+    <h2>Welcome Back</h2>
+    <p>Sign in to access your account and continue your beauty journey.</p>
+    <img
+      src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=900&q=80"
+      alt="Beauty products"
+    />
   </div>
-  <div class="card">
-    <h2>Register</h2>
-    <form action="/auth/register" method="post">
-      <input type="text" name="fullName" placeholder="Full name" required />
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button class="btn btn-soft" type="submit">Create Account</button>
-    </form>
+
+  <div class="auth-card card">
+    <div class="auth-tabs" role="tablist" aria-label="Authentication">
+      <button class="auth-tab <%= defaultTab !== 'signup' ? 'is-active' : '' %>" type="button" data-tab-target="signin-panel">Sign In</button>
+      <button class="auth-tab <%= defaultTab === 'signup' ? 'is-active' : '' %>" type="button" data-tab-target="signup-panel">Sign Up</button>
+    </div>
+
+    <% if (error) { %><p class="auth-error"><%= error %></p><% } %>
+
+    <div id="signin-panel" class="auth-panel <%= defaultTab !== 'signup' ? 'is-active' : '' %>">
+      <form action="/auth/login" method="post">
+        <input type="email" name="email" placeholder="jane@example.com" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button class="btn btn-primary auth-submit" type="submit">Sign In</button>
+      </form>
+      <p class="auth-switch">
+        Don't have an account?
+        <button class="auth-text-btn" type="button" data-switch-tab="signup-panel">Sign up</button>
+      </p>
+    </div>
+
+    <div id="signup-panel" class="auth-panel <%= defaultTab === 'signup' ? 'is-active' : '' %>">
+      <form action="/auth/register" method="post">
+        <input type="text" name="fullName" placeholder="Full name" required />
+        <input type="email" name="email" placeholder="jane@example.com" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button class="btn btn-soft auth-submit" type="submit">Create Account</button>
+      </form>
+      <p class="auth-switch">
+        Already have an account?
+        <button class="auth-text-btn" type="button" data-switch-tab="signin-panel">Sign in</button>
+      </p>
+    </div>
   </div>
 </section>
+<script>
+  (function () {
+    const tabs = document.querySelectorAll(".auth-tab");
+    const panels = document.querySelectorAll(".auth-panel");
+    const switchButtons = document.querySelectorAll("[data-switch-tab]");
+
+    function activatePanel(targetId) {
+      tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.tabTarget === targetId));
+      panels.forEach((panel) => panel.classList.toggle("is-active", panel.id === targetId));
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", function () {
+        activatePanel(this.dataset.tabTarget);
+      });
+    });
+
+    switchButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        activatePanel(this.dataset.switchTab);
+      });
+    });
+  })();
+</script>
 <%- include("partials/footer") %>

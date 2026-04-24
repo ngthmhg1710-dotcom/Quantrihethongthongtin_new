@@ -5,8 +5,34 @@ const Order = require("../models/Order");
 const router = express.Router();
 
 router.get("/products", async (req, res) => {
-  const products = await Product.find();
-  res.render("products", { title: "Product Listing", products });
+  const search = (req.query.search || "").trim();
+  const category = (req.query.category || "all").trim();
+  const skinType = (req.query.skinType || "all").trim();
+  const maxPrice = Number(req.query.maxPrice || 1000);
+
+  const query = {};
+  if (search) query.name = { $regex: search, $options: "i" };
+  if (category !== "all") query.category = category;
+  if (skinType !== "all") query.badges = skinType;
+  if (!Number.isNaN(maxPrice)) query.price = { $lte: Math.max(maxPrice, 0) };
+
+  const [products, categories] = await Promise.all([
+    Product.find(query).sort({ createdAt: -1 }),
+    Product.distinct("category"),
+  ]);
+
+  res.render("products", {
+    title: "Shop All Products",
+    products,
+    filters: {
+      search,
+      category,
+      skinType,
+      maxPrice: Number.isNaN(maxPrice) ? 1000 : Math.max(maxPrice, 0),
+    },
+    categories: (categories || []).filter(Boolean),
+    skinTypes: ["Dry", "Oily", "Combination", "Normal", "Sensitive"],
+  });
 });
 
 router.get("/products/:slug", async (req, res) => {

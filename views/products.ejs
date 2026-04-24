@@ -1,43 +1,70 @@
 <%- include("partials/header") %>
 
 <section class="section">
-  <h1>Product Listing</h1>
+  <h1>Shop All Products</h1>
+  <p class="shop-subtitle">Discover our complete collection of premium skincare</p>
 
-  <div class="grid">
-    <% if (products && products.length > 0) { %>
+  <form class="shop-search" method="get" action="/products">
+    <input type="text" name="search" placeholder="Search products..." value="<%= filters.search %>" />
+    <input type="hidden" name="category" value="<%= filters.category %>" />
+    <input type="hidden" name="skinType" value="<%= filters.skinType %>" />
+    <input type="hidden" name="maxPrice" value="<%= filters.maxPrice %>" />
+  </form>
 
-      <% products.forEach((product) => { %>
-        <article class="card">
+  <div class="shop-layout">
+    <aside class="shop-filters card">
+      <h3>Filters</h3>
+      <form method="get" action="/products">
+        <div class="filter-group">
+          <h4>Category</h4>
+          <label><input type="radio" name="category" value="all" <%= filters.category === "all" ? "checked" : "" %> /> All</label>
+          <% categories.forEach((item) => { %>
+            <label><input type="radio" name="category" value="<%= item %>" <%= filters.category === item ? "checked" : "" %> /> <%= item %></label>
+          <% }) %>
+        </div>
 
-          <img 
-            src="<%= product.image || '/images/default.png' %>" 
-            alt="<%= product.name || 'No name' %>" 
-          />
+        <div class="filter-group">
+          <h4>Skin Type</h4>
+          <label><input type="radio" name="skinType" value="all" <%= filters.skinType === "all" ? "checked" : "" %> /> All</label>
+          <% skinTypes.forEach((item) => { %>
+            <label><input type="radio" name="skinType" value="<%= item %>" <%= filters.skinType === item ? "checked" : "" %> /> <%= item %></label>
+          <% }) %>
+        </div>
 
-          <h3><%= product.name || 'Unnamed product' %></h3>
+        <div class="filter-group">
+          <h4>Price Range</h4>
+          <input type="range" min="0" max="100" step="1" name="maxPrice" value="<%= filters.maxPrice > 100 ? 100 : filters.maxPrice %>" />
+          <div class="range-labels">
+            <span>$0</span>
+            <span>$<%= filters.maxPrice > 100 ? 100 : filters.maxPrice %></span>
+          </div>
+        </div>
 
-          <p><%= product.description || 'No description available' %></p>
+        <input type="hidden" name="search" value="<%= filters.search %>" />
+        <button class="btn btn-soft" type="submit">Apply Filters</button>
+      </form>
+    </aside>
 
-          <p>
-            <strong>
-              $
-              <%= product.price ? product.price.toFixed(2) : '0.00' %>
-            </strong>
-          </p>
-
-          <a 
-            class="btn btn-soft" 
-            href="/products/<%= product.slug || '' %>"
-          >
-            View Detail
-          </a>
-
-        </article>
-      <% }) %>
-
-    <% } else { %>
-      <p>No products available</p>
-    <% } %>
+    <div>
+      <p class="shop-count"><%= products.length %> products found</p>
+      <div class="grid shop-grid">
+        <% if (products && products.length > 0) { %>
+          <% products.forEach((product) => { %>
+            <article class="card">
+              <img src="<%= product.image || '/images/default.png' %>" alt="<%= product.name || 'No name' %>" />
+              <h3><%= product.name || 'Unnamed product' %></h3>
+              <p class="product-category"><%= product.category || "Skincare" %></p>
+              <p>
+                <strong>$<%= product.price ? product.price.toFixed(2) : '0.00' %></strong>
+              </p>
+              <a class="btn btn-soft" href="/products/<%= product.slug || '' %>">View</a>
+            </article>
+          <% }) %>
+        <% } else { %>
+          <p>No products match your filter.</p>
+        <% } %>
+      </div>
+    </div>
   </div>
 </section>
 

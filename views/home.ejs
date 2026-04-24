@@ -1,33 +1,28 @@
 <%- include("partials/header") %>
 
-<section class="hero">
-  <p>New Collection</p>
-  <h1>Luminous skin, with a side of sass.</h1>
-  <p>Elevated skincare essentials designed for the modern ritual.</p>
-  <a class="btn btn-primary" href="/products">Shop Now</a>
+<section class="home-hero">
+  <div class="home-hero-content">
+    <p class="hero-kicker">new in town</p>
+    <h1>Luminous skin, with a side of sass.</h1>
+    <p>Luxury-inspired skincare essentials that elevate your everyday glow ritual.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/products">Shop Now</a>
+      <a class="btn btn-outline" href="/products">Explore Essentials</a>
+    </div>
+  </div>
 </section>
 
-<section class="section">
+<section class="section home-essentials">
   <h2>The Essentials</h2>
+  <p class="section-caption">Our most loved formulas for that signature glow.</p>
 
-  <div class="grid">
+  <div class="grid home-product-grid">
     <% if (products && products.length > 0) { %>
-      
       <% products.forEach((product) => { %>
-        <article class="card">
-
-          <img 
-            src="<%= product.image || '/images/default.png' %>" 
-            alt="<%= product.name || 'No name' %>" 
-          />
-
+        <article class="card home-product-card">
+          <img src="<%= product.image || '/images/default.png' %>" alt="<%= product.name || 'No name' %>" />
           <h3><%= product.name || 'Unnamed product' %></h3>
-
-          <p>
-            $
-            <%= product.price ? product.price.toFixed(2) : '0.00' %>
-          </p>
-
+          <p class="home-product-price">$<%= product.price ? product.price.toFixed(2) : '0.00' %></p>
           <div class="badges">
             <% if (product.badges && product.badges.length > 0) { %>
               <% product.badges.forEach((badge) => { %>
@@ -37,13 +32,60 @@
               <span class="badge">New</span>
             <% } %>
           </div>
-
+          <a class="home-product-link" href="/products/<%= product.slug || '' %>">View</a>
         </article>
       <% }) %>
-
     <% } else { %>
-      <p>No products available</p>
+      <p>No products available right now.</p>
     <% } %>
+  </div>
+</section>
+
+<section class="section home-routine">
+  <p class="section-overline">The Ritual</p>
+  <h2>Step-by-Step Perfection</h2>
+  <p class="section-caption">Master your glow with our curated four-step morning routine.</p>
+  <div class="routine-grid">
+    <article class="routine-item">
+      <span class="routine-icon">1</span>
+      <h3>Cleanse</h3>
+      <p>Start with a gentle cleanser to refresh and prep your skin.</p>
+    </article>
+    <article class="routine-item">
+      <span class="routine-icon">2</span>
+      <h3>Treat</h3>
+      <p>Target concerns with concentrated serum ingredients.</p>
+    </article>
+    <article class="routine-item">
+      <span class="routine-icon">3</span>
+      <h3>Hydrate</h3>
+      <p>Lock in moisture and support your skin barrier.</p>
+    </article>
+    <article class="routine-item">
+      <span class="routine-icon">4</span>
+      <h3>Protect</h3>
+      <p>Finish with SPF to defend against UV and pollution.</p>
+    </article>
+  </div>
+</section>
+
+<section class="section home-feature">
+  <div class="feature-main">
+    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80" alt="Close-up skincare portrait" />
+    <div class="feature-main-text">
+      <h2>Skin First. Always.</h2>
+      <a class="btn btn-primary" href="/products">Build Our Set</a>
+    </div>
+  </div>
+  <div class="feature-side">
+    <article class="feature-box light">
+      <h3>Refill, Reuse, Rejoice</h3>
+      <p>Our packaging is crafted to be re-used and recycled with ease.</p>
+    </article>
+    <article class="feature-box dark">
+      <h3>Fast Delivery</h3>
+      <p>Nationwide shipping in 48 hours for every order over $50.</p>
+    </article>
   </div>
 </section>
 
